@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { ProjectImage, CreateProjectImageInput, UpdateProjectImageInput, ImageUploadResult } from '@/types/image';
+import { ProjectImage, CreateProjectImageInput, ImageUploadResult } from '@/types/image';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -157,7 +157,7 @@ export class ImageAPI {
   }
 
   // データベース形式への変換
-  private static transformToDatabase(image: CreateProjectImageInput): any {
+  private static transformToDatabase(image: CreateProjectImageInput): Record<string, unknown> {
     return {
       project_id: image.projectId,
       file_name: image.fileName,
@@ -169,17 +169,17 @@ export class ImageAPI {
   }
 
   // アプリケーション形式への変換
-  private static transformFromDatabase(data: any): ProjectImage {
+  private static transformFromDatabase(data: Record<string, unknown>): ProjectImage {
     return {
-      id: data.id,
-      projectId: data.project_id,
-      fileName: data.file_name,
-      filePath: data.file_path,
-      fileSize: data.file_size,
-      mimeType: data.mime_type,
-      displayOrder: data.display_order,
-      createdAt: new Date(data.created_at),
-      updatedAt: new Date(data.updated_at)
+      id: data.id as string,
+      projectId: data.project_id as string,
+      fileName: data.file_name as string,
+      filePath: data.file_path as string,
+      fileSize: data.file_size as number,
+      mimeType: data.mime_type as string,
+      displayOrder: data.display_order as number,
+      createdAt: new Date(data.created_at as string),
+      updatedAt: new Date(data.updated_at as string)
     };
   }
 }

@@ -19,9 +19,6 @@ export interface CreateProjectImageInput {
   displayOrder?: number;
 }
 
-export interface UpdateProjectImageInput {
-  displayOrder?: number;
-}
 
 export interface ImageUploadResult {
   success: boolean;

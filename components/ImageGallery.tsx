@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { ProjectImage, ImageUploadResult } from '@/types/image';
+import { ProjectImage } from '@/types/image';
 import { ImageAPI } from '@/lib/api/images';
 
 interface ImageGalleryProps {

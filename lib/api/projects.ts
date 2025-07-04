@@ -110,22 +110,22 @@ export class ProjectsAPI {
   }
 
   // データベースの形式からアプリの形式に変換
-  private static transformFromDB(dbData: any): Project {
+  private static transformFromDB(dbData: Record<string, unknown>): Project {
     return {
-      id: dbData.id,
-      title: dbData.title,
-      description: dbData.description,
-      url: dbData.url || undefined,
-      githubLink: dbData.github_link || undefined,
-      isPublic: dbData.is_public,
-      createdAt: new Date(dbData.created_at),
-      updatedAt: new Date(dbData.updated_at),
+      id: dbData.id as string,
+      title: dbData.title as string,
+      description: dbData.description as string,
+      url: dbData.url as string || undefined,
+      githubLink: dbData.github_link as string || undefined,
+      isPublic: dbData.is_public as boolean,
+      createdAt: new Date(dbData.created_at as string),
+      updatedAt: new Date(dbData.updated_at as string),
     }
   }
 
   // アプリの形式からデータベースの形式に変換
-  private static transformToDB(appData: Partial<CreateProjectInput>): any {
-    const result: any = {
+  private static transformToDB(appData: Partial<CreateProjectInput>): Record<string, unknown> {
+    const result: Record<string, unknown> = {
       title: appData.title,
       url: appData.url || null,
       github_link: appData.githubLink || null,

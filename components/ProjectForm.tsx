@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { CreateProjectInput, UpdateProjectInput, Project } from "@/types/project";
+import { CreateProjectInput, Project } from "@/types/project";
 import Header from "./Header";
 
 interface ProjectFormProps {
   mode: "create" | "edit";
   initialData?: Project;
-  onSubmit: (data: any) => void;
+  onSubmit: (data: CreateProjectInput & { id?: string }) => void;
   onDelete?: () => void;
   disabled?: boolean;
 }
