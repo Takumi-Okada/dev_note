@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import AdminAuth from "@/components/AdminAuth";
 import MarkdownEditor from "@/components/MarkdownEditor";
 import Header from "@/components/Header";
 import { Project } from "@/types/project";
@@ -64,8 +65,8 @@ export default function EditDescription({ params }: EditDescriptionProps) {
         description: description
       });
 
-      // 保存成功後、詳細ページに遷移
-      router.push(`/projects/${project.id}`);
+      // 保存成功後、管理画面の詳細ページに遷移
+      router.push(`/admin/projects/${project.id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "説明の保存に失敗しました");
     } finally {
@@ -98,16 +99,17 @@ export default function EditDescription({ params }: EditDescriptionProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <AdminAuth>
+      <div className="min-h-screen bg-gray-50">
       <Header 
         title={`${project.title} - 説明を編集`}
         showBackButton={true}
-        backHref={`/projects/${id}`}
+        backHref={`/admin/projects/${id}`}
         backLabel={`← ${project.title}`}
         actions={
           <>
             <Link
-              href={`/projects/${id}`}
+              href={`/admin/projects/${id}`}
               className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
             >
               キャンセル
@@ -152,6 +154,7 @@ export default function EditDescription({ params }: EditDescriptionProps) {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </AdminAuth>
   );
 }

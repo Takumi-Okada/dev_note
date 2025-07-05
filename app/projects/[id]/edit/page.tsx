@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { UpdateProjectInput, Project } from "@/types/project";
+import { CreateProjectInput, Project } from "@/types/project";
 import ProjectForm from "@/components/ProjectForm";
 import { ProjectsAPI } from "@/lib/api/projects";
 
@@ -48,7 +48,7 @@ export default function EditProject({ params }: EditProjectProps) {
     fetchProject();
   }, [id]);
 
-  const handleSubmit = async (data: UpdateProjectInput) => {
+  const handleSubmit = async (data: CreateProjectInput & { id?: string }) => {
     try {
       setIsSubmitting(true);
       setError(null);

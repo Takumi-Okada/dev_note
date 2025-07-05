@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import AdminAuth from "@/components/AdminAuth";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import Header from "@/components/Header";
 import ImageGallery from "@/components/ImageGallery";
@@ -87,21 +88,23 @@ export default function ProjectDetail({ params }: ProjectDetailProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <AdminAuth>
+      <div className="min-h-screen bg-gray-50">
       <Header 
         title={project.title}
         showBackButton={true}
-        backLabel="← プロジェクト一覧"
+        backHref="/admin"
+        backLabel="← 管理画面"
         actions={
           <>
             <Link
-              href={`/projects/${id}/description/edit`}
+              href={`/admin/projects/${id}/description/edit`}
               className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors"
             >
               説明を編集
             </Link>
             <Link
-              href={`/projects/${id}/edit`}
+              href={`/admin/projects/${id}/edit`}
               className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
             >
               基本情報編集
@@ -181,6 +184,6 @@ export default function ProjectDetail({ params }: ProjectDetailProps) {
         </section>
       </main>
       </div>
-    </div>
+    </AdminAuth>
   );
 }
