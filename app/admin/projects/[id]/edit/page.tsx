@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { UpdateProjectInput, Project } from "@/types/project";
+import AdminAuth from "@/components/AdminAuth";
+import { CreateProjectInput, Project } from "@/types/project";
 import ProjectForm from "@/components/ProjectForm";
 import { ProjectsAPI } from "@/lib/api/projects";
 
@@ -48,15 +49,15 @@ export default function EditProject({ params }: EditProjectProps) {
     fetchProject();
   }, [id]);
 
-  const handleSubmit = async (data: UpdateProjectInput) => {
+  const handleSubmit = async (data: CreateProjectInput & { id?: string }) => {
     try {
       setIsSubmitting(true);
       setError(null);
       
       const updatedProject = await ProjectsAPI.update({ ...data, id });
       
-      // 更新成功後、詳細ページに遷移
-      router.push(`/projects/${updatedProject.id}`);
+      // 更新成功後、管理画面の詳細ページに遷移
+      router.push(`/admin/projects/${updatedProject.id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "プロジェクトの更新に失敗しました");
     } finally {
@@ -115,32 +116,34 @@ export default function EditProject({ params }: EditProjectProps) {
   }
 
   return (
-    <div>
-      {error && (
-        <div className="container mx-auto px-4 py-4 max-w-2xl">
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
-            {error}
-          </div>
-        </div>
-      )}
-      
-      <ProjectForm 
-        mode="edit" 
-        initialData={project}
-        onSubmit={handleSubmit}
-        onDelete={handleDelete}
-        disabled={isSubmitting}
-      />
-      
-      {isSubmitting && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6">
-            <div className="text-center">
-              <div className="text-gray-600">処理中...</div>
+    <AdminAuth>
+      <div>
+        {error && (
+          <div className="container mx-auto px-4 py-4 max-w-2xl">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+              {error}
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+        
+        <ProjectForm 
+          mode="edit" 
+          initialData={project}
+          onSubmit={handleSubmit}
+          onDelete={handleDelete}
+          disabled={isSubmitting}
+        />
+        
+        {isSubmitting && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6">
+              <div className="text-center">
+                <div className="text-gray-600">処理中...</div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </AdminAuth>
   );
 }
