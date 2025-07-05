@@ -90,30 +90,30 @@ export default function ProjectDetail({ params }: ProjectDetailProps) {
   return (
     <AdminAuth>
       <div className="min-h-screen bg-gray-50">
-      <Header 
-        title={project.title}
-        showBackButton={true}
-        backHref="/admin"
-        backLabel="← 管理画面"
-        actions={
-          <>
-            <Link
-              href={`/admin/projects/${id}/description/edit`}
-              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors"
-            >
-              説明を編集
-            </Link>
-            <Link
-              href={`/admin/projects/${id}/edit`}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
-            >
-              基本情報編集
-            </Link>
-          </>
-        }
-      />
-      
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <Header 
+          title={project.title}
+          showBackButton={true}
+          backHref="/admin"
+          backLabel="← 管理画面"
+          actions={
+            <>
+              <Link
+                href={`/admin/projects/${id}/description/edit`}
+                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                説明を編集
+              </Link>
+              <Link
+                href={`/admin/projects/${id}/edit`}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                基本情報編集
+              </Link>
+            </>
+          }
+        />
+        
+        <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="mb-6">
           <p className="text-gray-600 mb-2">
             作成日: {formatDate(project.createdAt)} | 更新日: {formatDate(project.updatedAt)}
@@ -125,7 +125,7 @@ export default function ProjectDetail({ params }: ProjectDetailProps) {
           )}
         </div>
 
-      <main className="space-y-8">
+        <main className="space-y-8">
         {images.length > 0 && (
           <section>
             <div className="relative w-full h-64 md:h-80 rounded-lg overflow-hidden">
@@ -182,7 +182,8 @@ export default function ProjectDetail({ params }: ProjectDetailProps) {
             </a>
           )}
         </section>
-      </main>
+        </main>
+        </div>
       </div>
     </AdminAuth>
   );

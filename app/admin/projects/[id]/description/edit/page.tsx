@@ -101,7 +101,7 @@ export default function EditDescription({ params }: EditDescriptionProps) {
   return (
     <AdminAuth>
       <div className="min-h-screen bg-gray-50">
-      <Header 
+        <Header 
         title={`${project.title} - 説明を編集`}
         showBackButton={true}
         backHref={`/admin/projects/${id}`}
@@ -127,33 +127,33 @@ export default function EditDescription({ params }: EditDescriptionProps) {
             </button>
           </>
         }
-      />
-
-      {error && (
-        <div className="max-w-6xl mx-auto px-6 py-4">
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-            {error}
-          </div>
-        </div>
-      )}
-
-      <main className="h-[calc(100vh-140px)] max-w-6xl mx-auto px-6 py-6">
-        <MarkdownEditor
-          value={description}
-          onChange={setDescription}
-          className="h-full"
         />
-      </main>
 
-      {saving && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6">
-            <div className="text-center">
-              <div className="text-gray-600">説明を保存中...</div>
+        {error && (
+          <div className="max-w-6xl mx-auto px-6 py-4">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+              {error}
             </div>
           </div>
-        </div>
-      )}
+        )}
+
+        <main className="h-[calc(100vh-140px)] max-w-6xl mx-auto px-6 py-6">
+          <MarkdownEditor
+            value={description}
+            onChange={setDescription}
+            className="h-full"
+          />
+        </main>
+
+        {saving && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6">
+              <div className="text-center">
+                <div className="text-gray-600">説明を保存中...</div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </AdminAuth>
   );
