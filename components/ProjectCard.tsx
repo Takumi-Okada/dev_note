@@ -1,12 +1,32 @@
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Project } from "@/types/project";
+import { ProjectImage } from "@/types/image";
+import { ImageAPI } from "@/lib/api/images";
 
 interface ProjectCardProps {
   project: Project;
 }
 
 export default function ProjectCard({ project }: ProjectCardProps) {
+  const [mainImage, setMainImage] = useState<ProjectImage | null>(null);
+
+  useEffect(() => {
+    const fetchMainImage = async () => {
+      try {
+        const images = await ImageAPI.getProjectImages(project.id);
+        if (images.length > 0) {
+          setMainImage(images[0]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch project images:', error);
+      }
+    };
+
+    fetchMainImage();
+  }, [project.id]);
+
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('ja-JP', {
       year: 'numeric',
@@ -17,10 +37,10 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-      {project.mainImage && (
+      {mainImage && (
         <div className="relative w-full h-48">
           <Image
-            src={project.mainImage}
+            src={ImageAPI.getImageUrl(mainImage.filePath)}
             alt={project.title}
             fill
             className="object-cover"
