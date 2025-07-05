@@ -54,7 +54,7 @@ export default function AdminAuth({ children }: AdminAuthProps) {
       } else {
         setError("パスワードが正しくありません");
       }
-    } catch (error) {
+    } catch {
       setError("認証に失敗しました");
     }
   };

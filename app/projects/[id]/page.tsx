@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
@@ -21,7 +20,6 @@ export default function PublicProjectDetail({ params }: ProjectDetailProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [id, setId] = useState<string>("");
-  const router = useRouter();
 
   useEffect(() => {
     const getParams = async () => {

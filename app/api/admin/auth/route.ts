@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       );
     }
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "認証に失敗しました" },
       { status: 500 }
