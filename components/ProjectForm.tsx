@@ -58,7 +58,8 @@ export default function ProjectForm({ mode, initialData, onSubmit, onDelete, dis
       <Header 
         title={mode === "create" ? "新規プロジェクト作成" : "プロジェクトを編集"}
         showBackButton={true}
-        backLabel="← プロジェクト一覧"
+        backHref="/admin"
+        backLabel="← 管理画面"
       />
       
       <div className="container mx-auto px-4 py-8 max-w-2xl">

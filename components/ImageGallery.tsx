@@ -3,13 +3,15 @@
 import { useState, useEffect } from 'react';
 import { ProjectImage } from '@/types/image';
 import { ImageAPI } from '@/lib/api/images';
+import { AdminImagesAPI } from '@/lib/api/admin-images';
 
 interface ImageGalleryProps {
   projectId: string;
   className?: string;
+  isAdmin?: boolean;
 }
 
-export default function ImageGallery({ projectId, className = "" }: ImageGalleryProps) {
+export default function ImageGallery({ projectId, className = "", isAdmin = false }: ImageGalleryProps) {
   const [images, setImages] = useState<ProjectImage[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -67,11 +69,19 @@ export default function ImageGallery({ projectId, className = "" }: ImageGallery
   const handleDeleteImage = async (imageId: string) => {
     if (!confirm('この画像を削除しますか？')) return;
 
-    const success = await ImageAPI.deleteImage(imageId);
-    if (success) {
+    try {
+      if (isAdmin) {
+        await AdminImagesAPI.deleteImage(imageId);
+      } else {
+        const success = await ImageAPI.deleteImage(imageId);
+        if (!success) {
+          throw new Error('画像の削除に失敗しました');
+        }
+      }
       setImages(prev => prev.filter(img => img.id !== imageId));
-    } else {
-      console.error('画像の削除に失敗しました');
+    } catch (error) {
+      console.error('画像の削除に失敗しました:', error);
+      alert('画像の削除に失敗しました');
     }
   };
 

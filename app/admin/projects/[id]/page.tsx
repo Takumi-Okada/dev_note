@@ -157,7 +157,7 @@ export default function ProjectDetail({ params }: ProjectDetailProps) {
         </section>
 
         <section>
-          <ImageGallery projectId={id} />
+          <ImageGallery projectId={id} isAdmin={true} />
         </section>
 
         <section className="flex gap-4">

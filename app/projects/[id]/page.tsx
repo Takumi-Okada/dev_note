@@ -1,8 +1,6 @@
-"use client";
-
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Metadata } from "next";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import ImageSlider from "@/components/ImageSlider";
 import { Project } from "@/types/project";
@@ -14,54 +12,88 @@ interface ProjectDetailProps {
   params: Promise<{ id: string }>;
 }
 
-export default function PublicProjectDetail({ params }: ProjectDetailProps) {
-  const [project, setProject] = useState<Project | null>(null);
-  const [images, setImages] = useState<ProjectImage[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [id, setId] = useState<string>("");
+export async function generateMetadata({ params }: ProjectDetailProps): Promise<Metadata> {
+  const resolvedParams = await params;
+  const id = resolvedParams.id;
 
-  useEffect(() => {
-    const getParams = async () => {
-      const resolvedParams = await params;
-      setId(resolvedParams.id);
+  try {
+    const [project, images] = await Promise.all([
+      ProjectsAPI.getById(id),
+      ImageAPI.getProjectImages(id)
+    ]);
+
+    if (!project || !project.isPublic) {
+      return {
+        title: "プロジェクトが見つかりません - DevNote",
+        description: "指定されたプロジェクトは存在しないか、非公開に設定されています。",
+      };
+    }
+
+    const firstImage = images[0];
+    const ogImage = firstImage ? ImageAPI.getImageUrl(firstImage.filePath) : "/icon.png";
+    const description = project.description 
+      ? project.description.substring(0, 160) + "..."
+      : "個人開発プロジェクトの詳細をご覧ください。";
+
+    return {
+      title: `${project.title} - DevNote`,
+      description,
+      openGraph: {
+        title: project.title,
+        description,
+        url: `https://dev-note-rho.vercel.app/projects/${id}`,
+        siteName: "DevNote",
+        images: [
+          {
+            url: ogImage,
+            width: 1200,
+            height: 630,
+            alt: project.title,
+          },
+        ],
+        locale: "ja_JP",
+        type: "website",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: project.title,
+        description,
+        images: [ogImage],
+      },
     };
-    getParams();
-  }, [params]);
-
-  useEffect(() => {
-    if (!id) return;
-
-    const fetchProject = async () => {
-      try {
-        setLoading(true);
-        const [projectData, imagesData] = await Promise.all([
-          ProjectsAPI.getById(id),
-          ImageAPI.getProjectImages(id)
-        ]);
-        
-        if (!projectData) {
-          setError("プロジェクトが見つかりません");
-          return;
-        }
-
-        // 非公開プロジェクトの場合はアクセス拒否
-        if (!projectData.isPublic) {
-          setError("このプロジェクトは非公開です");
-          return;
-        }
-        
-        setProject(projectData);
-        setImages(imagesData);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "プロジェクトの取得に失敗しました");
-      } finally {
-        setLoading(false);
-      }
+  } catch (error) {
+    return {
+      title: "プロジェクトが見つかりません - DevNote",
+      description: "指定されたプロジェクトは存在しないか、非公開に設定されています。",
     };
+  }
+}
 
-    fetchProject();
-  }, [id]);
+export default async function PublicProjectDetail({ params }: ProjectDetailProps) {
+  const resolvedParams = await params;
+  const id = resolvedParams.id;
+
+  let project: Project | null = null;
+  let images: ProjectImage[] = [];
+  let error: string | null = null;
+
+  try {
+    const [projectData, imagesData] = await Promise.all([
+      ProjectsAPI.getById(id),
+      ImageAPI.getProjectImages(id)
+    ]);
+    
+    if (!projectData) {
+      error = "プロジェクトが見つかりません";
+    } else if (!projectData.isPublic) {
+      error = "このプロジェクトは非公開です";
+    } else {
+      project = projectData;
+      images = imagesData;
+    }
+  } catch (err) {
+    error = err instanceof Error ? err.message : "プロジェクトの取得に失敗しました";
+  }
 
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('ja-JP', {
@@ -70,14 +102,6 @@ export default function PublicProjectDetail({ params }: ProjectDetailProps) {
       day: '2-digit'
     }).format(date);
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">読み込み中...</div>
-      </div>
-    );
-  }
 
   if (error || !project) {
     return (
