@@ -7,7 +7,7 @@ import AdminAuth from "@/components/AdminAuth";
 import Header from "@/components/Header";
 import { Project } from "@/types/project";
 import { ProjectImage } from "@/types/image";
-import { ProjectsAPI } from "@/lib/api/projects";
+import { AdminProjectsAPI } from "@/lib/api/admin-projects";
 import { ImageAPI } from "@/lib/api/images";
 
 export default function AdminHome() {
@@ -18,7 +18,7 @@ export default function AdminHome() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const projectsData = await ProjectsAPI.getAll();
+        const projectsData = await AdminProjectsAPI.getAll();
         setProjects(projectsData);
 
         // 各プロジェクトの画像を取得

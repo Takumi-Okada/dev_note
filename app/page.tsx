@@ -67,16 +67,9 @@ export default function Portfolio() {
               />
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">DevNote</h1>
-                <p className="text-gray-600 text-sm">個人開発プロジェクト集</p>
+                <p className="text-gray-600 text-sm">個人開発プロジェクト</p>
               </div>
             </div>
-            
-            <Link
-              href="/admin"
-              className="text-gray-400 hover:text-gray-600 text-sm transition-colors"
-            >
-              管理画面
-            </Link>
           </div>
         </div>
       </header>

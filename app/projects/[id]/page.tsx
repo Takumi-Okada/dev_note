@@ -89,14 +89,14 @@ export default function PublicProjectDetail({ params }: ProjectDetailProps) {
               <Link href="/" className="hover:opacity-80 transition-opacity">
                 <Image 
                   src="/icon.png" 
-                  alt="ポートフォリオ" 
+                  alt="DevNote" 
                   width={48} 
                   height={48}
                   className="rounded"
                 />
               </Link>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Portfolio</h1>
+                <h1 className="text-2xl font-bold text-gray-900">DevNote</h1>
                 <p className="text-gray-600 text-sm">個人開発プロジェクト集</p>
               </div>
             </div>
@@ -135,24 +135,23 @@ export default function PublicProjectDetail({ params }: ProjectDetailProps) {
                 />
               </Link>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Portfolio</h1>
-                <p className="text-gray-600 text-sm">個人開発プロジェクト集</p>
+                <h1 className="text-2xl font-bold text-gray-900">DevNote</h1>
+                <p className="text-gray-600 text-sm">個人開発プロジェクト</p>
               </div>
             </div>
-            
-            <Link
-              href="/"
-              className="text-gray-600 hover:text-gray-800 text-sm transition-colors"
-            >
-              ← 一覧に戻る
-            </Link>
           </div>
         </div>
       </header>
       
       <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <Link
+          href="/"
+          className="text-gray-600 hover:text-gray-800 text-md transition-colors"
+        >
+          一覧に戻る
+        </Link>
         {/* プロジェクトタイトル */}
-        <div className="mb-8">
+        <div className="mb-8 mt-4">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             {project.title}
           </h1>

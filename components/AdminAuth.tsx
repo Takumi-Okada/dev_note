@@ -27,6 +27,7 @@ export default function AdminAuth({ children }: AdminAuthProps) {
         // 期限切れの場合は認証情報を削除
         localStorage.removeItem("admin_authenticated");
         localStorage.removeItem("admin_auth_expiry");
+        localStorage.removeItem("admin_password");
       }
     }
     setLoading(false);
@@ -50,6 +51,7 @@ export default function AdminAuth({ children }: AdminAuthProps) {
         const expiry = Date.now() + (24 * 60 * 60 * 1000);
         localStorage.setItem("admin_authenticated", "true");
         localStorage.setItem("admin_auth_expiry", expiry.toString());
+        localStorage.setItem("admin_password", password); // パスワードを保存
         setIsAuthenticated(true);
       } else {
         setError("パスワードが正しくありません");
@@ -62,6 +64,7 @@ export default function AdminAuth({ children }: AdminAuthProps) {
   const handleLogout = () => {
     localStorage.removeItem("admin_authenticated");
     localStorage.removeItem("admin_auth_expiry");
+    localStorage.removeItem("admin_password");
     setIsAuthenticated(false);
     router.push("/");
   };

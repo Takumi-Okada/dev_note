@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import AdminAuth from "@/components/AdminAuth";
 import { CreateProjectInput, Project } from "@/types/project";
 import ProjectForm from "@/components/ProjectForm";
-import { ProjectsAPI } from "@/lib/api/projects";
+import { AdminProjectsAPI } from "@/lib/api/admin-projects";
 
 interface EditProjectProps {
   params: Promise<{ id: string }>;
@@ -33,7 +33,7 @@ export default function EditProject({ params }: EditProjectProps) {
     const fetchProject = async () => {
       try {
         setLoading(true);
-        const data = await ProjectsAPI.getById(id);
+        const data = await AdminProjectsAPI.getById(id);
         if (!data) {
           setError("プロジェクトが見つかりません");
           return;
@@ -54,7 +54,7 @@ export default function EditProject({ params }: EditProjectProps) {
       setIsSubmitting(true);
       setError(null);
       
-      const updatedProject = await ProjectsAPI.update({ ...data, id });
+      const updatedProject = await AdminProjectsAPI.update({ ...data, id });
       
       // 更新成功後、管理画面の詳細ページに遷移
       router.push(`/admin/projects/${updatedProject.id}`);
@@ -74,10 +74,10 @@ export default function EditProject({ params }: EditProjectProps) {
       setIsSubmitting(true);
       setError(null);
       
-      await ProjectsAPI.delete(id);
+      await AdminProjectsAPI.delete(id);
       
       // 削除成功後、一覧ページに遷移
-      router.push("/");
+      router.push("/admin");
     } catch (err) {
       setError(err instanceof Error ? err.message : "プロジェクトの削除に失敗しました");
     } finally {

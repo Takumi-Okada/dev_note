@@ -9,7 +9,7 @@ import Header from "@/components/Header";
 import ImageGallery from "@/components/ImageGallery";
 import { Project } from "@/types/project";
 import { ProjectImage } from "@/types/image";
-import { ProjectsAPI } from "@/lib/api/projects";
+import { AdminProjectsAPI } from "@/lib/api/admin-projects";
 import { ImageAPI } from "@/lib/api/images";
 
 interface ProjectDetailProps {
@@ -38,7 +38,7 @@ export default function ProjectDetail({ params }: ProjectDetailProps) {
       try {
         setLoading(true);
         const [projectData, imagesData] = await Promise.all([
-          ProjectsAPI.getById(id),
+          AdminProjectsAPI.getById(id),
           ImageAPI.getProjectImages(id)
         ]);
         
@@ -147,7 +147,7 @@ export default function ProjectDetail({ params }: ProjectDetailProps) {
             <div className="text-center py-12 text-gray-500 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
               <p className="text-lg mb-4">まだ説明が作成されていません</p>
               <Link
-                href={`/projects/${id}/description/edit`}
+                href={`/admin/projects/${id}/description/edit`}
                 className="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors"
               >
                 📝 説明を追加する

@@ -7,7 +7,7 @@ import AdminAuth from "@/components/AdminAuth";
 import MarkdownEditor from "@/components/MarkdownEditor";
 import Header from "@/components/Header";
 import { Project } from "@/types/project";
-import { ProjectsAPI } from "@/lib/api/projects";
+import { AdminProjectsAPI } from "@/lib/api/admin-projects";
 
 interface EditDescriptionProps {
   params: Promise<{ id: string }>;
@@ -36,7 +36,7 @@ export default function EditDescription({ params }: EditDescriptionProps) {
     const fetchProject = async () => {
       try {
         setLoading(true);
-        const data = await ProjectsAPI.getById(id);
+        const data = await AdminProjectsAPI.getById(id);
         if (!data) {
           setError("プロジェクトが見つかりません");
           return;
@@ -60,7 +60,7 @@ export default function EditDescription({ params }: EditDescriptionProps) {
       setSaving(true);
       setError(null);
 
-      await ProjectsAPI.update({
+      await AdminProjectsAPI.update({
         id: project.id,
         description: description
       });

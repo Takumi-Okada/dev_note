@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import AdminAuth from "@/components/AdminAuth";
 import { CreateProjectInput } from "@/types/project";
 import ProjectForm from "@/components/ProjectForm";
-import { ProjectsAPI } from "@/lib/api/projects";
+import { AdminProjectsAPI } from "@/lib/api/admin-projects";
 
 export default function NewProject() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -17,7 +17,7 @@ export default function NewProject() {
       setIsSubmitting(true);
       setError(null);
       
-      const newProject = await ProjectsAPI.create(data);
+      const newProject = await AdminProjectsAPI.create(data);
       
       // 作成成功後、管理画面の詳細ページに遷移
       router.push(`/admin/projects/${newProject.id}`);

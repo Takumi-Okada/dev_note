@@ -26,23 +26,15 @@ ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
 -- 古いポリシーを削除（存在する場合）
 DROP POLICY IF EXISTS "Public projects are viewable by everyone" ON projects;
 
--- 全てのプロジェクトを読み取り可能（認証なしでも）
+-- 公開プロジェクトのみ読み取り可能（認証なし）
 DROP POLICY IF EXISTS "Anyone can view projects" ON projects;
-CREATE POLICY "Anyone can view projects" ON projects
-  FOR SELECT USING (true);
+CREATE POLICY "Public projects are viewable" ON projects
+  FOR SELECT USING (is_public = true);
 
--- 全てのプロジェクトを挿入・更新・削除可能（認証なしでも）
+-- 書き込み系操作は禁止（ポリシーなし = アクセス拒否）
 DROP POLICY IF EXISTS "Anyone can insert projects" ON projects;
-CREATE POLICY "Anyone can insert projects" ON projects
-  FOR INSERT WITH CHECK (true);
-
 DROP POLICY IF EXISTS "Anyone can update projects" ON projects;
-CREATE POLICY "Anyone can update projects" ON projects
-  FOR UPDATE USING (true);
-
 DROP POLICY IF EXISTS "Anyone can delete projects" ON projects;
-CREATE POLICY "Anyone can delete projects" ON projects
-  FOR DELETE USING (true);
 
 -- ===============================================
 -- 2. プロジェクト画像テーブル
@@ -68,30 +60,23 @@ CREATE INDEX IF NOT EXISTS idx_project_images_display_order ON project_images(pr
 -- RLSポリシー設定
 ALTER TABLE project_images ENABLE ROW LEVEL SECURITY;
 
--- 全てのユーザーがCRUD操作可能（認証なし）
+-- 公開プロジェクトの画像のみ読み取り可能
 DROP POLICY IF EXISTS "Anyone can view project images" ON project_images;
-CREATE POLICY "Anyone can view project images"
+CREATE POLICY "Public project images are viewable"
 ON project_images FOR SELECT
 TO public
-USING (true);
+USING (
+  EXISTS (
+    SELECT 1 FROM projects 
+    WHERE projects.id = project_images.project_id 
+    AND projects.is_public = true
+  )
+);
 
+-- 書き込み系操作は禁止（ポリシーなし = アクセス拒否）
 DROP POLICY IF EXISTS "Anyone can insert project images" ON project_images;
-CREATE POLICY "Anyone can insert project images"
-ON project_images FOR INSERT
-TO public
-WITH CHECK (true);
-
 DROP POLICY IF EXISTS "Anyone can update project images" ON project_images;
-CREATE POLICY "Anyone can update project images"
-ON project_images FOR UPDATE
-TO public
-USING (true);
-
 DROP POLICY IF EXISTS "Anyone can delete project images" ON project_images;
-CREATE POLICY "Anyone can delete project images"
-ON project_images FOR DELETE
-TO public
-USING (true);
 
 -- ===============================================
 -- 3. 共通関数とトリガー
