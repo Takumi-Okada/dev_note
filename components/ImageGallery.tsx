@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import { ProjectImage } from '@/types/image';
 import { ImageAPI } from '@/lib/api/images';
 import { AdminImagesAPI } from '@/lib/api/admin-images';
@@ -17,12 +18,7 @@ export default function ImageGallery({ projectId, className = "", isAdmin = fals
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
 
-  // 画像一覧を取得
-  useEffect(() => {
-    loadImages();
-  }, [projectId]);
-
-  const loadImages = async () => {
+  const loadImages = useCallback(async () => {
     setLoading(true);
     try {
       const projectImages = await ImageAPI.getProjectImages(projectId);
@@ -32,7 +28,12 @@ export default function ImageGallery({ projectId, className = "", isAdmin = fals
     } finally {
       setLoading(false);
     }
-  };
+  }, [projectId]);
+
+  // 画像一覧を取得
+  useEffect(() => {
+    loadImages();
+  }, [loadImages]);
 
   // ファイルアップロード処理
   const handleFileUpload = async (files: FileList | null) => {
@@ -164,11 +165,13 @@ export default function ImageGallery({ projectId, className = "", isAdmin = fals
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {images.map((image) => (
             <div key={image.id} className="relative group">
-              <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
-                <img
+              <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden relative">
+                <Image
                   src={ImageAPI.getImageUrl(image.filePath)}
                   alt={image.fileName}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                 />
               </div>
               

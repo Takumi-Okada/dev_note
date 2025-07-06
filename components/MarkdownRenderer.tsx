@@ -56,7 +56,7 @@ export default function MarkdownRenderer({ content, className = "" }: MarkdownRe
               <div className="my-6">
                 <div className="relative w-full max-w-2xl mx-auto">
                   <img
-                    src={src}
+                    src={src as string}
                     alt={alt || ""}
                     className="w-full h-auto rounded-lg shadow-sm border border-gray-200"
                     loading="lazy"

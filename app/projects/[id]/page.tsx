@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: ProjectDetailProps): Promise<
         images: [ogImage],
       },
     };
-  } catch (error) {
+  } catch {
     return {
       title: "プロジェクトが見つかりません - DevNote",
       description: "指定されたプロジェクトは存在しないか、非公開に設定されています。",
